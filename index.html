@@ -1,0 +1,2482 @@
+# <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Банк — Вход и Регистрация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            padding: 40px 35px;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+            width: 480px;
+            max-width: 95%;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        h2 {
+            color: #fff;
+            text-align: center;
+            font-weight: 400;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+        h2 span {
+            color: #a29bfe;
+            font-weight: 600;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.5);
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+        .tab-btn.active {
+            background: rgba(108, 92, 231, 0.3);
+            color: #fff;
+        }
+        .tab-btn:hover {
+            background: rgba(108, 92, 231, 0.2);
+            color: #fff;
+        }
+        .form-group {
+            display: none;
+        }
+        .form-group.active {
+            display: block;
+        }
+        .input-group {
+            margin-bottom: 18px;
+        }
+        .input-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+            resize: vertical;
+        }
+        .input-group textarea {
+            min-height: 60px;
+        }
+        .input-group input:focus,
+        .input-group textarea:focus {
+            border-color: #6c5ce7;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 15px rgba(108, 92, 231, 0.2);
+        }
+        .input-group input::placeholder,
+        .input-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+        .password-wrapper {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            font-size: 14px;
+            background: none;
+            border: none;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-submit:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(108, 92, 231, 0.4);
+        }
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+        .error-message {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+        .success-message {
+            color: #51cf66;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+            padding: 10px;
+            background: rgba(81, 207, 102, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(81, 207, 102, 0.2);
+        }
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+        }
+        .footer-text a {
+            color: #a29bfe;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+        .dashboard {
+            display: none;
+            text-align: center;
+        }
+        .dashboard h2 {
+            color: #a29bfe;
+            margin-bottom: 15px;
+        }
+        .dashboard p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        .dashboard .btn-logout {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            padding: 12px 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+        .dashboard .btn-logout:hover {
+            background: rgba(255, 107, 107, 0.3);
+        }
+        .balance-display {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2ecc71;
+            margin: 8px 0;
+        }
+        .balance-display.infinity {
+            color: #ffd700;
+            font-size: 40px;
+        }
+        .code-display {
+            background: rgba(162, 155, 254, 0.1);
+            border: 1px solid rgba(162, 155, 254, 0.2);
+            border-radius: 12px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: #a29bfe;
+            letter-spacing: 8px;
+            font-family: monospace;
+        }
+        .task-list {
+            margin-top: 15px;
+            text-align: left;
+        }
+        .task-item {
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border-left: 3px solid #a29bfe;
+            margin-bottom: 8px;
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task-item .task-text {
+            flex: 1;
+        }
+        .task-item .task-date {
+            color: rgba(255,255,255,0.3);
+            font-size: 11px;
+        }
+        .task-item .delete-btn {
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+            transition: 0.3s;
+            background: none;
+            border: none;
+        }
+        .task-item .delete-btn:hover {
+            color: #ff4444;
+            transform: scale(1.2);
+        }
+
+        .request-item {
+            background: rgba(255, 215, 0, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .request-item .req-info {
+            flex: 1;
+        }
+        .request-item .req-amount {
+            color: #ffd700;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        .request-item .req-from {
+            color: #a29bfe;
+            font-weight: 500;
+        }
+        .request-item .req-status {
+            font-size: 13px;
+        }
+        .request-item .req-status.pending {
+            color: #f39c12;
+        }
+        .request-item .req-status.approved {
+            color: #2ecc71;
+        }
+        .request-item .req-status.rejected {
+            color: #ff6b6b;
+        }
+        .request-item .delete-btn {
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+            transition: 0.3s;
+            background: none;
+            border: none;
+        }
+        .request-item .delete-btn:hover {
+            color: #ff4444;
+            transform: scale(1.2);
+        }
+        .btn-approve {
+            background: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+            padding: 4px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.3s;
+        }
+        .btn-approve:hover {
+            background: rgba(46, 204, 113, 0.25);
+        }
+        .btn-reject {
+            background: rgba(255, 107, 107, 0.15);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            padding: 4px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.3s;
+            margin-left: 5px;
+        }
+        .btn-reject:hover {
+            background: rgba(255, 107, 107, 0.25);
+        }
+
+        .admin-section-title {
+            color: rgba(255, 215, 0, 0.6);
+            font-size: 13px;
+            text-align: center;
+            margin: 15px 0 8px 0;
+            letter-spacing: 1px;
+            border-top: 1px solid rgba(255, 215, 0, 0.1);
+            padding-top: 12px;
+        }
+        .admin-panel {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+        }
+        .admin-panel h3 {
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+        .admin-toggle {
+            display: block;
+            text-align: center;
+            margin-top: 12px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .admin-toggle:hover {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .admin-logout-btn {
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .admin-logout-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+        .user-list {
+            margin-top: 15px;
+            max-height: 150px;
+            overflow-y: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .user-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .user-list::-webkit-scrollbar-thumb {
+            background: rgba(255,215,0,0.3);
+            border-radius: 4px;
+        }
+        .user-item {
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            justify-content: space-between;
+        }
+        .user-item:hover {
+            background: rgba(255,215,0,0.08);
+            color: #fff;
+        }
+        .user-item:last-child {
+            border-bottom: none;
+        }
+        .user-item .user-login {
+            color: #a29bfe;
+            font-weight: 500;
+        }
+        .user-item .user-email {
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+        }
+        .user-item .user-balance {
+            color: #2ecc71;
+            font-weight: 600;
+        }
+        .user-details {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255,215,0,0.1);
+        }
+        .user-details.active {
+            display: block;
+        }
+        .user-details .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.7);
+        }
+        .user-details .detail-row:last-child {
+            border-bottom: none;
+        }
+        .user-details .detail-label {
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+        }
+        .user-details .detail-value {
+            color: #fff;
+            font-weight: 500;
+        }
+        .user-details .detail-value.password {
+            color: #ff6b6b;
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+        .user-details .detail-value.password-hidden {
+            color: rgba(255,255,255,0.3);
+            font-family: monospace;
+            letter-spacing: 2px;
+        }
+        .user-details .detail-value.infinity {
+            color: #ffd700;
+            font-weight: 700;
+            font-size: 20px;
+        }
+        .close-details-btn {
+            margin-top: 10px;
+            padding: 6px 16px;
+            background: rgba(255,107,107,0.1);
+            border: 1px solid rgba(255,107,107,0.2);
+            border-radius: 6px;
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+        .close-details-btn:hover {
+            background: rgba(255,107,107,0.2);
+        }
+
+        .recharge-area {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(46, 204, 113, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(46, 204, 113, 0.15);
+            display: none;
+        }
+        .recharge-area.active {
+            display: block;
+        }
+        .recharge-area .input-group {
+            margin-bottom: 10px;
+        }
+        .recharge-area .input-group input {
+            text-align: center;
+        }
+        .recharge-area .btn-recharge {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+        .recharge-area .btn-recharge:hover {
+            box-shadow: 0 0 25px rgba(46, 204, 113, 0.4);
+        }
+        .recharge-area .btn-cancel {
+            background: rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.5);
+            margin-top: 5px;
+        }
+        .recharge-area .btn-cancel:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .withdraw-admin-area {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 107, 107, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 107, 107, 0.15);
+            display: none;
+        }
+        .withdraw-admin-area.active {
+            display: block;
+        }
+        .withdraw-admin-area .input-group input {
+            text-align: center;
+        }
+        .withdraw-admin-area .btn-withdraw-admin {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        .withdraw-admin-area .btn-withdraw-admin:hover {
+            box-shadow: 0 0 25px rgba(231, 76, 60, 0.4);
+        }
+        .withdraw-admin-area .btn-cancel {
+            background: rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.5);
+            margin-top: 5px;
+        }
+        .withdraw-admin-area .btn-cancel:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .task-area {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            display: none;
+        }
+        .task-area.active {
+            display: block;
+        }
+        .task-area .input-group textarea {
+            min-height: 60px;
+        }
+        .btn-task-all {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+        .btn-task-one {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+        .task-area .btn-cancel {
+            background: rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.5);
+            margin-top: 5px;
+        }
+        .task-area .btn-cancel:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .task-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .task-buttons .btn-submit {
+            flex: 1;
+            margin-top: 5px;
+        }
+        .admin-task-all {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.08);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        .admin-task-all textarea {
+            min-height: 60px;
+        }
+        .admin-task-all .btn-task-all {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+        .admin-task-all .btn-task-all:hover {
+            box-shadow: 0 0 25px rgba(243, 156, 18, 0.4);
+        }
+        .admin-task-all .error-message {
+            margin-top: 8px;
+        }
+        .admin-task-all .success-message {
+            margin-top: 8px;
+        }
+
+        .business-area {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.08);
+        }
+        .btn-business {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+        .btn-business:hover {
+            box-shadow: 0 0 25px rgba(243, 156, 18, 0.4);
+        }
+        .request-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        .request-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .request-list::-webkit-scrollbar-thumb {
+            background: rgba(255,215,0,0.3);
+            border-radius: 4px;
+        }
+
+        .withdraw-section {
+            margin-top: 15px;
+            text-align: left;
+        }
+        .withdraw-section .input-group input {
+            text-align: center;
+            letter-spacing: 4px;
+            font-family: monospace;
+            font-size: 18px;
+        }
+        .transfer-section {
+            margin-top: 15px;
+            text-align: left;
+            padding: 15px;
+            background: rgba(162, 155, 254, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(162, 155, 254, 0.1);
+        }
+        .transfer-section .input-group input {
+            text-align: center;
+            letter-spacing: 4px;
+            font-family: monospace;
+            font-size: 18px;
+        }
+        .btn-transfer {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+        }
+        .btn-transfer:hover {
+            box-shadow: 0 0 25px rgba(108, 92, 231, 0.4);
+        }
+        .btn-withdraw-request {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+        .btn-withdraw-request:hover {
+            box-shadow: 0 0 25px rgba(243, 156, 18, 0.4);
+        }
+
+        .btn-make-admin {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            margin-top: 10px;
+        }
+        .btn-make-admin:hover {
+            box-shadow: 0 0 25px rgba(231, 76, 60, 0.4);
+        }
+        .btn-delete {
+            background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+            margin-top: 10px !important;
+        }
+        .btn-delete:hover {
+            box-shadow: 0 0 25px rgba(231, 76, 60, 0.4) !important;
+        }
+        .role-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .role-badge.superadmin {
+            background: rgba(255, 215, 0, 0.25);
+            color: #ffd700;
+        }
+        .role-badge.admin {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+        .role-badge.business {
+            background: rgba(243, 156, 18, 0.2);
+            color: #f39c12;
+        }
+        .role-badge.user {
+            background: rgba(162, 155, 254, 0.15);
+            color: #a29bfe;
+        }
+
+        .custom-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.85);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 15px;
+            z-index: 9999;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            max-width: 90%;
+            text-align: center;
+            pointer-events: none;
+        }
+        .custom-toast.show {
+            opacity: 1;
+        }
+
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(6px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
+        .custom-modal {
+            background: rgba(30, 30, 50, 0.95);
+            padding: 30px 35px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: scaleIn 0.3s ease;
+        }
+        .custom-modal .modal-message {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+        .custom-modal .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .custom-modal .modal-btn {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #fff;
+        }
+        .custom-modal .modal-btn.confirm {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+        .custom-modal .modal-btn.confirm:hover {
+            transform: scale(1.02);
+        }
+        .custom-modal .modal-btn.cancel {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+        }
+        .custom-modal .modal-btn.cancel:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .custom-modal .modal-input {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .custom-modal .modal-input:focus {
+            border-color: #6c5ce7;
+            box-shadow: 0 0 15px rgba(108, 92, 231, 0.2);
+        }
+        .custom-modal .modal-input::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+
+        .transfer-item {
+            padding: 6px 10px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 6px;
+            margin-bottom: 4px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(255,255,255,0.7);
+        }
+        .transfer-item .sender {
+            color: #a29bfe;
+            font-weight: 500;
+        }
+        .transfer-item .amount {
+            color: #2ecc71;
+            font-weight: 600;
+        }
+        .transfer-item .delete-btn {
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 8px;
+            transition: 0.3s;
+            background: none;
+            border: none;
+        }
+        .transfer-item .delete-btn:hover {
+            color: #ff4444;
+            transform: scale(1.2);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .clear-history-btn {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.15);
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: 0.3s;
+        }
+        .clear-history-btn:hover {
+            background: rgba(255, 107, 107, 0.2);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <div id="formsSection">
+            <h2>🏦 <span>Банк</span></h2>
+
+            <div class="tabs">
+                <button class="tab-btn active" id="tabLogin">Вход</button>
+                <button class="tab-btn" id="tabRegister">Регистрация</button>
+            </div>
+
+            <!-- Вход -->
+            <div class="form-group active" id="loginForm">
+                <div class="input-group">
+                    <label for="loginUsername">Логин или Email</label>
+                    <input type="text" id="loginUsername" placeholder="Введите логин или email">
+                </div>
+                <div class="input-group">
+                    <label for="loginPassword">Пароль</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="loginPassword" placeholder="Введите пароль">
+                        <button type="button" class="toggle-password" data-target="loginPassword">👁</button>
+                    </div>
+                </div>
+                <button class="btn-submit" id="loginBtn">Войти</button>
+                <div class="error-message" id="loginError"></div>
+                <div class="success-message" id="loginSuccess">✅ Вход выполнен!</div>
+            </div>
+
+            <!-- Регистрация -->
+            <div class="form-group" id="registerForm">
+                <div class="input-group">
+                    <label for="regUsername">Логин</label>
+                    <input type="text" id="regUsername" placeholder="Минимум 3 символа">
+                </div>
+                <div class="input-group">
+                    <label for="regEmail">Электронная почта</label>
+                    <input type="email" id="regEmail" placeholder="example@mail.ru">
+                </div>
+                <div class="input-group">
+                    <label for="regPassword">Пароль</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="regPassword" placeholder="Минимум 6 символов">
+                        <button type="button" class="toggle-password" data-target="regPassword">👁</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="regConfirm">Подтверждение пароля</label>
+                    <input type="password" id="regConfirm" placeholder="Повторите пароль">
+                </div>
+                <button class="btn-submit" id="registerBtn">Создать аккаунт</button>
+                <div class="error-message" id="regError"></div>
+                <div class="success-message" id="regSuccess">✅ Аккаунт создан!</div>
+            </div>
+
+            <div class="footer-text">
+                <span id="switchText">Нет аккаунта? <a id="switchToRegister">Зарегистрироваться</a></span>
+            </div>
+
+            <div class="admin-toggle" id="adminToggle">🔑 Админ-панель</div>
+
+            <!-- Админ-панель -->
+            <div class="admin-panel" id="adminPanel">
+                <h3>🔐 Администратор</h3>
+                <div class="input-group">
+                    <label for="adminLogin">Логин</label>
+                    <input type="text" id="adminLogin" placeholder="Введите логин или email">
+                </div>
+                <div class="input-group">
+                    <label for="adminPassword">Пароль</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="adminPassword" placeholder="Введите пароль">
+                        <button type="button" class="toggle-password" data-target="adminPassword">👁</button>
+                    </div>
+                </div>
+                <button class="btn-submit" id="adminLoginBtn" style="background: linear-gradient(135deg, #f39c12, #e67e22);">Войти как админ</button>
+                <div class="error-message" id="adminError"></div>
+                <div class="success-message" id="adminSuccess">✅ Вход выполнен!</div>
+                <div id="adminTools" style="display:none; margin-top:15px;">
+
+                    <div class="admin-task-all" id="adminTaskAllArea">
+                        <div style="color:#ffd700;text-align:center;font-weight:500;margin-bottom:8px;">📢 Дать задание ВСЕМ</div>
+                        <div class="input-group">
+                            <textarea id="adminTaskAllText" placeholder="Введите текст задания для всех пользователей..."></textarea>
+                        </div>
+                        <button class="btn-submit btn-task-all" id="adminTaskAllBtn">📢 Отправить всем</button>
+                        <div class="error-message" id="adminTaskAllError"></div>
+                        <div class="success-message" id="adminTaskAllSuccess">✅ Задание отправлено всем!</div>
+                    </div>
+
+                    <div class="admin-section-title">▼ Управление отдельными пользователями ▼</div>
+
+                    <h4 style="color:#ffd700;text-align:center;font-weight:400;margin-bottom:10px;">📋 Список аккаунтов</h4>
+                    <div class="user-list" id="userList"></div>
+
+                    <div class="user-details" id="userDetails">
+                        <div class="detail-row"><span class="detail-label">Логин</span><span class="detail-value" id="detailUsername">—</span></div>
+                        <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value" id="detailEmail">—</span></div>
+                        <div class="detail-row"><span class="detail-label">Пароль</span><span class="detail-value" id="detailPassword">—</span></div>
+                        <div class="detail-row"><span class="detail-label">Баланс</span><span class="detail-value" id="detailBalance">$0.00</span></div>
+                        <div class="detail-row"><span class="detail-label">Код</span><span class="detail-value" id="detailCode">—</span></div>
+                        <div class="detail-row"><span class="detail-label">Тип</span><span class="detail-value" id="detailRole">—</span></div>
+                        
+                        <div style="display:flex; gap:8px; margin-top:10px;">
+                            <button class="btn-submit" id="showRechargeBtn" style="flex:1; background: linear-gradient(135deg, #2ecc71, #27ae60);">💰 Пополнить</button>
+                            <button class="btn-submit" id="showWithdrawAdminBtn" style="flex:1; background: linear-gradient(135deg, #e74c3c, #c0392b);">💸 Списать</button>
+                        </div>
+                        
+                        <div class="recharge-area" id="rechargeArea">
+                            <div class="input-group">
+                                <label for="rechargeAmount">Сумма ($)</label>
+                                <input type="number" id="rechargeAmount" placeholder="Введите сумму" step="0.01" min="0.01">
+                            </div>
+                            <button class="btn-submit btn-recharge" id="confirmRechargeBtn">✅ Подтвердить пополнение</button>
+                            <button class="btn-submit btn-cancel" id="cancelRechargeBtn">✕ Отмена</button>
+                            <div class="error-message" id="rechargeError"></div>
+                            <div class="success-message" id="rechargeSuccess">✅ Баланс пополнен!</div>
+                        </div>
+
+                        <div class="withdraw-admin-area" id="withdrawAdminArea">
+                            <div class="input-group">
+                                <label for="withdrawAdminAmount">Сумма списания ($)</label>
+                                <input type="number" id="withdrawAdminAmount" placeholder="Введите сумму" step="0.01" min="0.01">
+                            </div>
+                            <button class="btn-submit btn-withdraw-admin" id="confirmWithdrawAdminBtn">✅ Подтвердить списание</button>
+                            <button class="btn-submit btn-cancel" id="cancelWithdrawAdminBtn">✕ Отмена</button>
+                            <div class="error-message" id="withdrawAdminError"></div>
+                            <div class="success-message" id="withdrawAdminSuccess">✅ Баланс списан!</div>
+                        </div>
+
+                        <button class="btn-submit" id="showTaskBtn" style="margin-top:10px; background: linear-gradient(135deg, #3498db, #2980b9);">👤 Дать задание этому</button>
+                        <div class="task-area" id="taskArea">
+                            <div class="input-group">
+                                <label for="taskText">Текст задания</label>
+                                <textarea id="taskText" placeholder="Введите текст задания для этого пользователя..."></textarea>
+                            </div>
+                            <button class="btn-submit btn-task-one" id="taskOneBtn">👤 Отправить этому</button>
+                            <button class="btn-submit btn-cancel" id="cancelTaskBtn">✕ Отмена</button>
+                            <div class="error-message" id="taskError"></div>
+                            <div class="success-message" id="taskSuccess">✅ Задание отправлено!</div>
+                        </div>
+
+                        <button class="btn-submit btn-make-admin" id="makeAdminBtn" style="display:none;">👑 Назначить администратором</button>
+                        <button class="btn-submit btn-delete" id="deleteUserBtn" style="display:none;">🗑️ Удалить аккаунт</button>
+
+                        <button class="close-details-btn" id="closeDetailsBtn">✕ Закрыть</button>
+                    </div>
+
+                    <div class="admin-section-title">▼ Бизнес-аккаунты ▼</div>
+
+                    <div class="business-area">
+                        <div style="color:#ffd700;text-align:center;font-weight:500;margin-bottom:8px;">🏢 Создать бизнес-аккаунт</div>
+                        <div class="input-group">
+                            <label for="businessName">Название бизнеса</label>
+                            <input type="text" id="businessName" placeholder="Введите название">
+                        </div>
+                        <div class="input-group">
+                            <label for="businessEmail">Email бизнеса</label>
+                            <input type="email" id="businessEmail" placeholder="business@example.com">
+                        </div>
+                        <div class="input-group">
+                            <label for="businessPassword">Пароль</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="businessPassword" placeholder="Минимум 6 символов">
+                                <button type="button" class="toggle-password" data-target="businessPassword">👁</button>
+                            </div>
+                        </div>
+                        <button class="btn-submit btn-business" id="createBusinessBtn">🏢 Создать бизнес-аккаунт</button>
+                        <div class="error-message" id="businessError"></div>
+                        <div class="success-message" id="businessSuccess">✅ Бизнес-аккаунт создан!</div>
+                    </div>
+
+                    <button class="admin-logout-btn" id="adminLogoutBtn">🚪 Выйти из админки</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Личный кабинет -->
+        <div class="dashboard" id="dashboard">
+            <h2>👋 Добро пожаловать, <span id="userNameDisplay">Пользователь</span>!</h2>
+            <p>Ваш баланс:</p>
+            <div class="balance-display" id="userBalance">$0.00</div>
+            <p style="font-size:13px; color:rgba(255,255,255,0.4);">Ваш код:</p>
+            <div class="code-display" id="userCodeDisplay">000</div>
+
+            <div style="margin-top:15px; text-align:left;">
+                <div class="history-header">
+                    <p style="color:#a29bfe;font-weight:500;margin:0;">📥 Входящие переводы</p>
+                    <button class="clear-history-btn" id="clearIncomingTransfersBtn">🗑️ Очистить</button>
+                </div>
+                <div id="incomingTransfers" style="max-height:120px; overflow-y:auto;">
+                    <p style="color:rgba(255,255,255,0.3);font-size:13px;text-align:center;">Нет входящих переводов</p>
+                </div>
+            </div>
+
+            <div style="margin-top:10px; text-align:left;">
+                <div class="history-header">
+                    <p style="color:#ffd700;font-weight:500;margin:0;">📩 Входящие запросы</p>
+                    <button class="clear-history-btn" id="clearIncomingRequestsBtn">🗑️ Очистить</button>
+                </div>
+                <div id="incomingRequests" style="max-height:150px; overflow-y:auto;">
+                    <p style="color:rgba(255,255,255,0.3);font-size:13px;text-align:center;">Нет запросов</p>
+                </div>
+            </div>
+
+            <div class="withdraw-section">
+                <p style="color:#ffd700;font-weight:500;text-align:center;margin-bottom:10px;">💰 Запросить списание со счёта</p>
+                <div class="input-group">
+                    <label for="withdrawTargetCode">Код владельца счёта</label>
+                    <input type="text" id="withdrawTargetCode" placeholder="Введите 3-значный код" maxlength="3">
+                </div>
+                <div class="input-group">
+                    <label for="withdrawAmount">Сумма ($)</label>
+                    <input type="number" id="withdrawAmount" placeholder="Введите сумму" step="0.01" min="0.01">
+                </div>
+                <button class="btn-submit btn-withdraw-request" id="withdrawBtn">📩 Отправить запрос</button>
+                <div class="error-message" id="withdrawError"></div>
+                <div class="success-message" id="withdrawSuccess">✅ Запрос отправлен!</div>
+                <div id="withdrawHistory" style="margin-top:10px; max-height:100px; overflow-y:auto;">
+                    <p style="color:rgba(255,255,255,0.3);font-size:13px;text-align:center;">Мои запросы</p>
+                </div>
+            </div>
+
+            <div class="transfer-section">
+                <p style="color:#a29bfe;font-weight:500;text-align:center;margin-bottom:10px;">💸 Отправить деньги по коду</p>
+                <div class="input-group">
+                    <label for="transferCode">Код получателя</label>
+                    <input type="text" id="transferCode" placeholder="Введите 3-значный код" maxlength="3">
+                </div>
+                <div class="input-group">
+                    <label for="transferAmount">Сумма ($)</label>
+                    <input type="number" id="transferAmount" placeholder="Введите сумму" step="0.01" min="0.01">
+                </div>
+                <button class="btn-submit btn-transfer" id="transferBtn">💸 Отправить</button>
+                <div class="error-message" id="transferError"></div>
+                <div class="success-message" id="transferSuccess">✅ Перевод выполнен!</div>
+            </div>
+
+            <div class="task-list" id="userTasks">
+                <p style="color:rgba(255,255,255,0.3);font-size:14px;text-align:center;">Заданий пока нет</p>
+            </div>
+            <button class="btn-logout" id="logoutBtn">🚪 Выйти</button>
+        </div>
+    </div>
+
+    <script>
+        // ===================== ХРАНИЛИЩЕ (localStorage) =====================
+        let users = [];
+        let currentUser = null;
+        let isAdminLoggedIn = false;
+        let selectedUserIndex = null;
+        let withdrawRequests = [];
+        let transferHistory = [];
+
+        // ===================== ИНИЦИАЛИЗАЦИЯ =====================
+        function initApp() {
+            try {
+                const saved = localStorage.getItem('users');
+                if (saved) {
+                    users = JSON.parse(saved);
+                } else {
+                    users = [];
+                }
+            } catch (e) {
+                users = [];
+            }
+
+            try {
+                const savedTransfers = localStorage.getItem('transferHistory');
+                if (savedTransfers) {
+                    transferHistory = JSON.parse(savedTransfers);
+                } else {
+                    transferHistory = [];
+                }
+            } catch (e) {
+                transferHistory = [];
+            }
+
+            const superAdminExists = users.some(u => u.isSuperAdmin === true);
+            if (!superAdminExists) {
+                const superAdmin = {
+                    username: 'admin',
+                    email: 'admin@bank.com',
+                    password: 'R3d#F0x$L9mN',
+                    money: Infinity,
+                    tasks: [],
+                    code: '000',
+                    isSuperAdmin: true,
+                    isAdmin: true,
+                    isBusiness: false
+                };
+                users.push(superAdmin);
+                saveUsers();
+                console.log('✅ Главный администратор создан автоматически с бесконечными деньгами');
+            }
+
+            try {
+                const reqs = localStorage.getItem('withdrawRequests');
+                if (reqs) withdrawRequests = JSON.parse(reqs);
+            } catch (e) {
+                withdrawRequests = [];
+            }
+        }
+
+        function saveUsers() {
+            try {
+                localStorage.setItem('users', JSON.stringify(users));
+            } catch (e) {}
+            if (isAdminLoggedIn) renderUserList();
+        }
+
+        function saveRequests() {
+            try {
+                localStorage.setItem('withdrawRequests', JSON.stringify(withdrawRequests));
+            } catch (e) {}
+            if (currentUser) {
+                renderIncomingRequests();
+                renderOutgoingHistory();
+                renderIncomingTransfers();
+            }
+        }
+
+        function saveTransfers() {
+            try {
+                localStorage.setItem('transferHistory', JSON.stringify(transferHistory));
+            } catch (e) {}
+            if (currentUser) {
+                renderIncomingTransfers();
+            }
+        }
+
+        function generateCode() {
+            let code = String(Math.floor(100 + Math.random() * 900));
+            while (users.some(u => u.code === code)) {
+                code = String(Math.floor(100 + Math.random() * 900));
+            }
+            return code;
+        }
+
+        function getRoleDisplay(user) {
+            if (user.isSuperAdmin) return { text: '👑 Главный админ', class: 'superadmin' };
+            if (user.isAdmin) return { text: '🛡️ Админ', class: 'admin' };
+            if (user.isBusiness) return { text: '🏢 Бизнес', class: 'business' };
+            return { text: '👤 Простой', class: 'user' };
+        }
+
+        function canSeePasswords() {
+            if (!currentUser) return false;
+            return currentUser.isSuperAdmin === true;
+        }
+
+        // ===================== УВЕДОМЛЕНИЯ =====================
+        function showToast(message, duration = 3000) {
+            const oldToast = document.querySelector('.custom-toast');
+            if (oldToast) oldToast.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'custom-toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 50);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, duration);
+        }
+
+        function showModal(message, onConfirm, onCancel, showInput = false) {
+            const oldModal = document.querySelector('.custom-modal-overlay');
+            if (oldModal) oldModal.remove();
+
+            const overlay = document.createElement('div');
+            overlay.className = 'custom-modal-overlay';
+            
+            let inputHtml = '';
+            if (showInput) {
+                inputHtml = `<input type="password" class="modal-input" id="modalPasswordInput" placeholder="Введите пароль главного админа...">`;
+            }
+
+            overlay.innerHTML = `
+                <div class="custom-modal">
+                    <div class="modal-message">${message}</div>
+                    ${inputHtml}
+                    <div class="modal-buttons">
+                        <button class="modal-btn confirm" id="modalConfirm">✅ Да</button>
+                        <button class="modal-btn cancel" id="modalCancel">❌ Нет</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+
+            if (showInput) {
+                document.getElementById('modalPasswordInput').focus();
+            }
+
+            document.getElementById('modalConfirm').addEventListener('click', function() {
+                const input = document.getElementById('modalPasswordInput');
+                const password = input ? input.value.trim() : '';
+                overlay.remove();
+                if (onConfirm) onConfirm(password);
+            });
+            document.getElementById('modalCancel').addEventListener('click', function() {
+                overlay.remove();
+                if (onCancel) onCancel();
+            });
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    overlay.remove();
+                    if (onCancel) onCancel();
+                }
+            });
+
+            if (showInput) {
+                document.getElementById('modalPasswordInput').addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        document.getElementById('modalConfirm').click();
+                    }
+                });
+            }
+        }
+
+        // ===================== DOM =====================
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const tabLogin = document.getElementById('tabLogin');
+        const tabRegister = document.getElementById('tabRegister');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const switchText = document.getElementById('switchText');
+
+        const loginUsername = document.getElementById('loginUsername');
+        const loginPassword = document.getElementById('loginPassword');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+        const loginSuccess = document.getElementById('loginSuccess');
+
+        const regUsername = document.getElementById('regUsername');
+        const regEmail = document.getElementById('regEmail');
+        const regPassword = document.getElementById('regPassword');
+        const regConfirm = document.getElementById('regConfirm');
+        const registerBtn = document.getElementById('registerBtn');
+        const regError = document.getElementById('regError');
+        const regSuccess = document.getElementById('regSuccess');
+
+        const dashboard = document.getElementById('dashboard');
+        const formsSection = document.getElementById('formsSection');
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        const userBalance = document.getElementById('userBalance');
+        const userCodeDisplay = document.getElementById('userCodeDisplay');
+        const userTasks = document.getElementById('userTasks');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        const incomingTransfers = document.getElementById('incomingTransfers');
+        const incomingRequests = document.getElementById('incomingRequests');
+        const withdrawTargetCode = document.getElementById('withdrawTargetCode');
+        const withdrawAmount = document.getElementById('withdrawAmount');
+        const withdrawBtn = document.getElementById('withdrawBtn');
+        const withdrawError = document.getElementById('withdrawError');
+        const withdrawSuccess = document.getElementById('withdrawSuccess');
+        const withdrawHistory = document.getElementById('withdrawHistory');
+
+        const transferCode = document.getElementById('transferCode');
+        const transferAmount = document.getElementById('transferAmount');
+        const transferBtn = document.getElementById('transferBtn');
+        const transferError = document.getElementById('transferError');
+        const transferSuccess = document.getElementById('transferSuccess');
+
+        // Админка
+        const adminToggle = document.getElementById('adminToggle');
+        const adminPanel = document.getElementById('adminPanel');
+        const adminLogin = document.getElementById('adminLogin');
+        const adminPassword = document.getElementById('adminPassword');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const adminError = document.getElementById('adminError');
+        const adminSuccess = document.getElementById('adminSuccess');
+        const adminTools = document.getElementById('adminTools');
+        const userList = document.getElementById('userList');
+        const userDetails = document.getElementById('userDetails');
+        const detailUsername = document.getElementById('detailUsername');
+        const detailEmail = document.getElementById('detailEmail');
+        const detailPassword = document.getElementById('detailPassword');
+        const detailBalance = document.getElementById('detailBalance');
+        const detailCode = document.getElementById('detailCode');
+        const detailRole = document.getElementById('detailRole');
+        const closeDetailsBtn = document.getElementById('closeDetailsBtn');
+        const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+        const makeAdminBtn = document.getElementById('makeAdminBtn');
+        const deleteUserBtn = document.getElementById('deleteUserBtn');
+
+        const showRechargeBtn = document.getElementById('showRechargeBtn');
+        const rechargeArea = document.getElementById('rechargeArea');
+        const rechargeAmount = document.getElementById('rechargeAmount');
+        const confirmRechargeBtn = document.getElementById('confirmRechargeBtn');
+        const cancelRechargeBtn = document.getElementById('cancelRechargeBtn');
+        const rechargeError = document.getElementById('rechargeError');
+        const rechargeSuccess = document.getElementById('rechargeSuccess');
+
+        const showWithdrawAdminBtn = document.getElementById('showWithdrawAdminBtn');
+        const withdrawAdminArea = document.getElementById('withdrawAdminArea');
+        const withdrawAdminAmount = document.getElementById('withdrawAdminAmount');
+        const confirmWithdrawAdminBtn = document.getElementById('confirmWithdrawAdminBtn');
+        const cancelWithdrawAdminBtn = document.getElementById('cancelWithdrawAdminBtn');
+        const withdrawAdminError = document.getElementById('withdrawAdminError');
+        const withdrawAdminSuccess = document.getElementById('withdrawAdminSuccess');
+
+        const showTaskBtn = document.getElementById('showTaskBtn');
+        const taskArea = document.getElementById('taskArea');
+        const taskText = document.getElementById('taskText');
+        const taskOneBtn = document.getElementById('taskOneBtn');
+        const cancelTaskBtn = document.getElementById('cancelTaskBtn');
+        const taskError = document.getElementById('taskError');
+        const taskSuccess = document.getElementById('taskSuccess');
+
+        const adminTaskAllText = document.getElementById('adminTaskAllText');
+        const adminTaskAllBtn = document.getElementById('adminTaskAllBtn');
+        const adminTaskAllError = document.getElementById('adminTaskAllError');
+        const adminTaskAllSuccess = document.getElementById('adminTaskAllSuccess');
+
+        const businessName = document.getElementById('businessName');
+        const businessEmail = document.getElementById('businessEmail');
+        const businessPassword = document.getElementById('businessPassword');
+        const createBusinessBtn = document.getElementById('createBusinessBtn');
+        const businessError = document.getElementById('businessError');
+        const businessSuccess = document.getElementById('businessSuccess');
+
+        // ===================== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК =====================
+        function switchTab(tab) {
+            loginForm.classList.remove('active');
+            registerForm.classList.remove('active');
+            tabLogin.classList.remove('active');
+            tabRegister.classList.remove('active');
+
+            if (tab === 'login') {
+                loginForm.classList.add('active');
+                tabLogin.classList.add('active');
+                switchText.innerHTML = `Нет аккаунта? <a id="switchToRegister">Зарегистрироваться</a>`;
+                const newLink = document.getElementById('switchToRegister');
+                if (newLink) newLink.addEventListener('click', () => switchTab('register'));
+            } else {
+                registerForm.classList.add('active');
+                tabRegister.classList.add('active');
+                switchText.innerHTML = `Уже есть аккаунт? <a id="switchToLogin">Войти</a>`;
+                const newLink = document.getElementById('switchToLogin');
+                if (newLink) newLink.addEventListener('click', () => switchTab('login'));
+            }
+            loginError.style.display = 'none';
+            regError.style.display = 'none';
+            loginSuccess.style.display = 'none';
+            regSuccess.style.display = 'none';
+        }
+
+        tabLogin.addEventListener('click', () => switchTab('login'));
+        tabRegister.addEventListener('click', () => switchTab('register'));
+        if (switchToRegister) switchToRegister.addEventListener('click', () => switchTab('register'));
+
+        // ===================== ПОКАЗАТЬ/СКРЫТЬ ПАРОЛЬ =====================
+        document.querySelectorAll('.toggle-password').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const targetId = this.dataset.target;
+                const input = document.getElementById(targetId);
+                if (!input) return;
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                this.textContent = type === 'password' ? '👁' : '🙈';
+            });
+        });
+
+        // ===================== АДМИН-ПАНЕЛЬ =====================
+        adminToggle.addEventListener('click', function() {
+            if (adminPanel.style.display === 'block') {
+                adminPanel.style.display = 'none';
+                adminTools.style.display = 'none';
+                isAdminLoggedIn = false;
+                userDetails.classList.remove('active');
+                rechargeArea.classList.remove('active');
+                withdrawAdminArea.classList.remove('active');
+                taskArea.classList.remove('active');
+            } else {
+                adminPanel.style.display = 'block';
+            }
+            adminError.style.display = 'none';
+            adminSuccess.style.display = 'none';
+            rechargeError.style.display = 'none';
+            rechargeSuccess.style.display = 'none';
+            withdrawAdminError.style.display = 'none';
+            withdrawAdminSuccess.style.display = 'none';
+            taskError.style.display = 'none';
+            taskSuccess.style.display = 'none';
+            adminTaskAllError.style.display = 'none';
+            adminTaskAllSuccess.style.display = 'none';
+            businessError.style.display = 'none';
+            businessSuccess.style.display = 'none';
+        });
+
+        // ===================== РЕНДЕР СПИСКА АККАУНТОВ =====================
+        function renderUserList() {
+            if (!isAdminLoggedIn) return;
+            userList.innerHTML = '';
+            if (users.length === 0) {
+                userList.innerHTML = '<div style="color:rgba(255,255,255,0.3);text-align:center;padding:20px;">Нет зарегистрированных пользователей</div>';
+                return;
+            }
+            users.forEach((user, index) => {
+                const div = document.createElement('div');
+                div.className = 'user-item';
+                const role = getRoleDisplay(user);
+                const balanceDisplay = user.isSuperAdmin ? '∞' : `$${(user.money || 0).toFixed(2)}`;
+                div.innerHTML = `
+                    <span class="user-login">${user.username}</span>
+                    <span class="user-email">${user.email}</span>
+                    <span class="user-balance">${balanceDisplay}</span>
+                `;
+                div.addEventListener('click', () => showUserDetails(index));
+                userList.appendChild(div);
+            });
+        }
+
+        // ===================== ПОКАЗАТЬ ДЕТАЛИ АККАУНТА =====================
+        function showUserDetails(index) {
+            const user = users[index];
+            if (!user) return;
+            selectedUserIndex = index;
+            
+            detailUsername.textContent = user.username || '—';
+            detailEmail.textContent = user.email || '—';
+            
+            const isSuperAdmin = currentUser && currentUser.isSuperAdmin === true;
+            detailPassword.textContent = isSuperAdmin ? (user.password || '—') : '••••••••';
+            detailPassword.className = isSuperAdmin ? 'detail-value password' : 'detail-value password-hidden';
+            
+            if (user.isSuperAdmin) {
+                detailBalance.textContent = '∞';
+                detailBalance.className = 'detail-value infinity';
+            } else {
+                detailBalance.textContent = `$${(user.money || 0).toFixed(2)}`;
+                detailBalance.className = 'detail-value';
+            }
+            
+            detailCode.textContent = user.code || '—';
+
+            const role = getRoleDisplay(user);
+            detailRole.innerHTML = `<span class="role-badge ${role.class}">${role.text}</span>`;
+
+            userDetails.classList.add('active');
+            rechargeArea.classList.remove('active');
+            withdrawAdminArea.classList.remove('active');
+            taskArea.classList.remove('active');
+            rechargeError.style.display = 'none';
+            rechargeSuccess.style.display = 'none';
+            withdrawAdminError.style.display = 'none';
+            withdrawAdminSuccess.style.display = 'none';
+            taskError.style.display = 'none';
+            taskSuccess.style.display = 'none';
+            rechargeAmount.value = '';
+            withdrawAdminAmount.value = '';
+            taskText.value = '';
+
+            const isSelf = currentUser && currentUser.email === user.email;
+            const targetIsAdmin = user.isAdmin || user.isSuperAdmin;
+            
+            if (isSuperAdmin && !targetIsAdmin && !user.isSuperAdmin && !isSelf) {
+                makeAdminBtn.style.display = 'block';
+            } else {
+                makeAdminBtn.style.display = 'none';
+            }
+
+            if (isSuperAdmin && !isSelf && !user.isSuperAdmin) {
+                deleteUserBtn.style.display = 'block';
+            } else {
+                deleteUserBtn.style.display = 'none';
+            }
+        }
+
+        // ===================== НАЗНАЧИТЬ АДМИНИСТРАТОРОМ =====================
+        makeAdminBtn.addEventListener('click', function() {
+            if (selectedUserIndex === null) return;
+            const user = users[selectedUserIndex];
+            if (!user || user.isSuperAdmin) return;
+
+            showModal(
+                `Назначить "${user.username}" администратором?`,
+                function() {
+                    user.isAdmin = true;
+                    saveUsers();
+                    showUserDetails(selectedUserIndex);
+                    renderUserList();
+                    showToast(`✅ ${user.username} назначен администратором!`);
+                },
+                function() {
+                    showToast('❌ Отменено');
+                }
+            );
+        });
+
+        // ===================== УДАЛИТЬ АККАУНТ =====================
+        deleteUserBtn.addEventListener('click', function() {
+            if (selectedUserIndex === null) return;
+            const user = users[selectedUserIndex];
+            if (!user) return;
+
+            showModal(
+                `Удалить аккаунт "${user.username}"?<br><small style="color:rgba(255,255,255,0.4);">Для подтверждения введите пароль главного админа</small>`,
+                function(password) {
+                    const superAdmin = users.find(u => u.isSuperAdmin === true);
+                    if (!superAdmin) {
+                        showToast('❌ Главный администратор не найден');
+                        return;
+                    }
+                    if (password !== superAdmin.password) {
+                        showToast('❌ Неверный пароль!');
+                        return;
+                    }
+                    users.splice(selectedUserIndex, 1);
+                    saveUsers();
+                    userDetails.classList.remove('active');
+                    renderUserList();
+                    showToast(`✅ Аккаунт "${user.username}" удалён!`);
+                    selectedUserIndex = null;
+                },
+                function() {
+                    showToast('❌ Удаление отменено');
+                },
+                true
+            );
+        });
+
+        // ===================== ПОПОЛНЕНИЕ =====================
+        showRechargeBtn.addEventListener('click', function() {
+            rechargeArea.classList.toggle('active');
+            withdrawAdminArea.classList.remove('active');
+            taskArea.classList.remove('active');
+            rechargeError.style.display = 'none';
+            rechargeSuccess.style.display = 'none';
+            rechargeAmount.value = '';
+            if (rechargeArea.classList.contains('active')) {
+                rechargeAmount.focus();
+            }
+        });
+
+        cancelRechargeBtn.addEventListener('click', function() {
+            rechargeArea.classList.remove('active');
+            rechargeError.style.display = 'none';
+            rechargeSuccess.style.display = 'none';
+            rechargeAmount.value = '';
+        });
+
+        confirmRechargeBtn.addEventListener('click', function() {
+            const amount = parseFloat(rechargeAmount.value);
+            rechargeError.style.display = 'none';
+            rechargeSuccess.style.display = 'none';
+
+            if (selectedUserIndex === null) {
+                rechargeError.textContent = '⚠️ Выберите пользователя';
+                rechargeError.style.display = 'block';
+                return;
+            }
+
+            if (isNaN(amount) || amount <= 0) {
+                rechargeError.textContent = '⚠️ Введите корректную сумму (>0)';
+                rechargeError.style.display = 'block';
+                return;
+            }
+
+            const user = users[selectedUserIndex];
+            
+            if (!user.isSuperAdmin) {
+                user.money = (user.money || 0) + amount;
+                saveUsers();
+            }
+
+            if (user.isSuperAdmin) {
+                detailBalance.textContent = '∞';
+                detailBalance.className = 'detail-value infinity';
+            } else {
+                detailBalance.textContent = `$${(user.money || 0).toFixed(2)}`;
+                detailBalance.className = 'detail-value';
+            }
+            
+            rechargeSuccess.textContent = `✅ Баланс ${user.username} пополнен на $${amount.toFixed(2)}`;
+            rechargeSuccess.style.display = 'block';
+            rechargeAmount.value = '';
+
+            if (currentUser && currentUser.email === user.email) {
+                updateUserDashboard(currentUser);
+            }
+
+            renderUserList();
+
+            setTimeout(() => {
+                rechargeSuccess.style.display = 'none';
+                rechargeArea.classList.remove('active');
+            }, 2500);
+        });
+
+        // ===================== СПИСАНИЕ (АДМИН) =====================
+        showWithdrawAdminBtn.addEventListener('click', function() {
+            withdrawAdminArea.classList.toggle('active');
+            rechargeArea.classList.remove('active');
+            taskArea.classList.remove('active');
+            withdrawAdminError.style.display = 'none';
+            withdrawAdminSuccess.style.display = 'none';
+            withdrawAdminAmount.value = '';
+            if (withdrawAdminArea.classList.contains('active')) {
+                withdrawAdminAmount.focus();
+            }
+        });
+
+        cancelWithdrawAdminBtn.addEventListener('click', function() {
+            withdrawAdminArea.classList.remove('active');
+            withdrawAdminError.style.display = 'none';
+            withdrawAdminSuccess.style.display = 'none';
+            withdrawAdminAmount.value = '';
+        });
+
+        confirmWithdrawAdminBtn.addEventListener('click', function() {
+            const amount = parseFloat(withdrawAdminAmount.value);
+            withdrawAdminError.style.display = 'none';
+            withdrawAdminSuccess.style.display = 'none';
+
+            if (selectedUserIndex === null) {
+                withdrawAdminError.textContent = '⚠️ Выберите пользователя';
+                withdrawAdminError.style.display = 'block';
+                return;
+            }
+
+            if (isNaN(amount) || amount <= 0) {
+                withdrawAdminError.textContent = '⚠️ Введите корректную сумму (>0)';
+                withdrawAdminError.style.display = 'block';
+                return;
+            }
+
+            const user = users[selectedUserIndex];
+            
+            if (user.isSuperAdmin) {
+                withdrawAdminError.textContent = '⚠️ Нельзя списать с бесконечного счёта главного админа';
+                withdrawAdminError.style.display = 'block';
+                return;
+            }
+
+            if ((user.money || 0) < amount) {
+                withdrawAdminError.textContent = '⚠️ Недостаточно средств на счету';
+                withdrawAdminError.style.display = 'block';
+                return;
+            }
+
+            user.money = (user.money || 0) - amount;
+            saveUsers();
+
+            detailBalance.textContent = `$${(user.money || 0).toFixed(2)}`;
+            withdrawAdminSuccess.textContent = `✅ С баланса ${user.username} списано $${amount.toFixed(2)}`;
+            withdrawAdminSuccess.style.display = 'block';
+            withdrawAdminAmount.value = '';
+
+            if (currentUser && currentUser.email === user.email) {
+                updateUserDashboard(currentUser);
+            }
+
+            renderUserList();
+
+            setTimeout(() => {
+                withdrawAdminSuccess.style.display = 'none';
+                withdrawAdminArea.classList.remove('active');
+            }, 2500);
+        });
+
+        // ===================== ЗАДАНИЯ =====================
+        showTaskBtn.addEventListener('click', function() {
+            taskArea.classList.toggle('active');
+            rechargeArea.classList.remove('active');
+            withdrawAdminArea.classList.remove('active');
+            taskError.style.display = 'none';
+            taskSuccess.style.display = 'none';
+            taskText.value = '';
+            if (taskArea.classList.contains('active')) {
+                taskText.focus();
+            }
+        });
+
+        cancelTaskBtn.addEventListener('click', function() {
+            taskArea.classList.remove('active');
+            taskError.style.display = 'none';
+            taskSuccess.style.display = 'none';
+            taskText.value = '';
+        });
+
+        taskOneBtn.addEventListener('click', function() {
+            const text = taskText.value.trim();
+            taskError.style.display = 'none';
+            taskSuccess.style.display = 'none';
+
+            if (!text) {
+                taskError.textContent = '⚠️ Введите текст задания';
+                taskError.style.display = 'block';
+                return;
+            }
+
+            if (selectedUserIndex === null) {
+                taskError.textContent = '⚠️ Выберите пользователя из списка';
+                taskError.style.display = 'block';
+                return;
+            }
+
+            const now = new Date();
+            const dateStr = now.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+            const user = users[selectedUserIndex];
+            if (!user.tasks) user.tasks = [];
+            user.tasks.push({ text: text, date: dateStr });
+            saveUsers();
+
+            taskSuccess.textContent = `✅ Задание отправлено пользователю ${user.username}!`;
+            taskSuccess.style.display = 'block';
+            taskText.value = '';
+
+            if (currentUser && currentUser.email === user.email) {
+                renderUserTasks(currentUser);
+            }
+
+            setTimeout(() => {
+                taskSuccess.style.display = 'none';
+                taskArea.classList.remove('active');
+            }, 2500);
+        });
+
+        adminTaskAllBtn.addEventListener('click', function() {
+            const text = adminTaskAllText.value.trim();
+            adminTaskAllError.style.display = 'none';
+            adminTaskAllSuccess.style.display = 'none';
+
+            if (!text) {
+                adminTaskAllError.textContent = '⚠️ Введите текст задания';
+                adminTaskAllError.style.display = 'block';
+                return;
+            }
+
+            const now = new Date();
+            const dateStr = now.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+            users.forEach(user => {
+                if (!user.tasks) user.tasks = [];
+                user.tasks.push({ text: text, date: dateStr });
+            });
+            saveUsers();
+
+            adminTaskAllSuccess.textContent = `✅ Задание отправлено ВСЕМ пользователям!`;
+            adminTaskAllSuccess.style.display = 'block';
+            adminTaskAllText.value = '';
+
+            if (currentUser) {
+                renderUserTasks(currentUser);
+            }
+
+            setTimeout(() => {
+                adminTaskAllSuccess.style.display = 'none';
+            }, 3000);
+        });
+
+        function renderUserTasks(user) {
+            userTasks.innerHTML = '';
+            if (!user.tasks || user.tasks.length === 0) {
+                userTasks.innerHTML = '<p style="color:rgba(255,255,255,0.3);font-size:14px;text-align:center;">Заданий пока нет</p>';
+                return;
+            }
+            user.tasks.slice().reverse().forEach((task, idx) => {
+                const div = document.createElement('div');
+                div.className = 'task-item';
+                div.innerHTML = `
+                    <span class="task-text">${task.text}</span>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <span class="task-date">${task.date}</span>
+                        <button class="delete-btn" data-task-index="${idx}">✕</button>
+                    </div>
+                `;
+                userTasks.appendChild(div);
+            });
+
+            document.querySelectorAll('#userTasks .delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.taskIndex);
+                    if (!currentUser || !currentUser.tasks) return;
+                    currentUser.tasks.splice(idx, 1);
+                    saveUsers();
+                    renderUserTasks(currentUser);
+                    showToast('🗑️ Задание удалено');
+                });
+            });
+        }
+
+        // ===================== БИЗНЕС-АККАУНТЫ =====================
+        createBusinessBtn.addEventListener('click', function() {
+            const name = businessName.value.trim();
+            const email = businessEmail.value.trim();
+            const password = businessPassword.value.trim();
+
+            businessError.style.display = 'none';
+            businessSuccess.style.display = 'none';
+
+            if (name.length < 2) {
+                businessError.textContent = '⚠️ Введите название бизнеса';
+                businessError.style.display = 'block';
+                return;
+            }
+            if (!email || !email.includes('@')) {
+                businessError.textContent = '⚠️ Введите корректный email';
+                businessError.style.display = 'block';
+                return;
+            }
+            if (password.length < 6) {
+                businessError.textContent = '⚠️ Пароль минимум 6 символов';
+                businessError.style.display = 'block';
+                return;
+            }
+            if (users.some(u => u.email === email)) {
+                businessError.textContent = '⚠️ Email уже используется';
+                businessError.style.display = 'block';
+                return;
+            }
+
+            const code = generateCode();
+            users.push({
+                username: name,
+                email: email,
+                password: password,
+                money: 0,
+                tasks: [],
+                code: code,
+                isBusiness: true
+            });
+            saveUsers();
+
+            businessSuccess.textContent = `✅ Бизнес-аккаунт "${name}" создан! Код: ${code}`;
+            businessSuccess.style.display = 'block';
+            businessName.value = '';
+            businessEmail.value = '';
+            businessPassword.value = '';
+        });
+
+        // ===================== ВХОДЯЩИЕ ПЕРЕВОДЫ =====================
+        function renderIncomingTransfers() {
+            if (!currentUser) return;
+            const transfers = transferHistory.filter(t => t.to === currentUser.code);
+            incomingTransfers.innerHTML = '';
+            if (transfers.length === 0) {
+                incomingTransfers.innerHTML = '<p style="color:rgba(255,255,255,0.3);font-size:13px;text-align:center;">Нет входящих переводов</p>';
+                return;
+            }
+            transfers.slice().reverse().forEach((t, idx) => {
+                const sender = users.find(u => u.code === t.from);
+                const senderName = sender ? sender.username : t.from;
+                const div = document.createElement('div');
+                div.className = 'transfer-item';
+                const originalIndex = transfers.length - 1 - idx;
+                div.innerHTML = `
+                    <span><span class="sender">${senderName}</span> перевел(а) <span class="amount">+$${t.amount.toFixed(2)}</span></span>
+                    <button class="delete-btn" data-transfer-index="${originalIndex}">✕</button>
+                `;
+                incomingTransfers.appendChild(div);
+            });
+
+            document.querySelectorAll('#incomingTransfers .delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.transferIndex);
+                    transferHistory.splice(idx, 1);
+                    saveTransfers();
+                    renderIncomingTransfers();
+                    showToast('🗑️ Перевод удалён из истории');
+                });
+            });
+        }
+
+        // ===================== ВХОДЯЩИЕ ЗАПРОСЫ =====================
+        function renderIncomingRequests() {
+            if (!currentUser) return;
+            const requests = withdrawRequests.filter(r => r.toCode === currentUser.code && r.status === 'pending');
+            incomingRequests.innerHTML = '';
+            if (requests.length === 0) {
+                incomingRequests.innerHTML = '<p style="color:rgba(255,255,255,0.3);font-size:13px;text-align:center;">Нет входящих запросов</p>';
+                return;
+            }
+            requests.forEach((req, idx) => {
+                const fromUser = users.find(u => u.code === req.fromCode);
+                const div = document.createElement('div');
+                div.className = 'request-item';
+                div.innerHTML = `
+                    <div class="req-info">
+                        <div>
+                            <span class="req-from">${fromUser ? fromUser.username : req.fromCode}</span>
+                            <span class="req-amount">-$${req.amount.toFixed(2)}</span>
+                            <span class="req-status pending">⏳ Ожидает</span>
+                        </div>
+                        <div style="font-size:12px;color:rgba(255,255,255,0.4);">${req.date || ''}</div>
+                        <div style="margin-top:6px;">
+                            <button class="btn-approve" data-idx="${idx}">✅ Одобрить</button>
+                            <button class="btn-reject" data-idx="${idx}">❌ Отклонить</button>
+                        </div>
+                    </div>
+                    <button class="delete-btn" data-request-index="${idx}">✕</button>
+                `;
+                incomingRequests.appendChild(div);
+            });
+
+            document.querySelectorAll('#incomingRequests .btn-approve').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.idx);
+                    approveRequest(idx);
+                });
+            });
+            document.querySelectorAll('#incomingRequests .btn-reject').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.idx);
+                    rejectRequest(idx);
+                });
+            });
+            document.querySelectorAll('#incomingRequests .delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.requestIndex);
+                    withdrawRequests.splice(idx, 1);
+                    saveRequests();
+                    renderIncomingRequests();
+                    showToast('🗑️ Запрос удалён');
+                });
+            });
+        }
+
+        function approveRequest(index) {
+            const req = withdrawRequests[index];
+            if (!req || req.status !== 'pending') return;
+
+            const owner = users.find(u => u.code === req.toCode);
+            const requester = users.find(u => u.code === req.fromCode);
+
+            if (!owner || !requester) {
+                showToast('❌ Пользователь не найден');
+                return;
+            }
+
+            if (owner.isSuperAdmin) {
+                showToast('❌ Нельзя списать деньги с бесконечного счёта главного админа');
+                return;
+            }
+
+            if ((owner.money || 0) < req.amount) {
+                showToast('❌ Недостаточно средств на счету владельца');
+                return;
+            }
+
+            owner.money = (owner.money || 0) - req.amount;
+            requester.money = (requester.money || 0) + req.amount;
+
+            req.status = 'approved';
+            saveUsers();
+            saveRequests();
+            renderIncomingRequests();
+            renderOutgoingHistory();
+            
+            if (currentUser && (currentUser.code === req.toCode || currentUser.code === req.fromCode)) {
+                updateUserDashboard(currentUser);
+            }
+            
+            showToast(`✅ Запрос на $${req.amount.toFixed(2)} одобрен! Деньги переведены ${requester.username}`);
+        }
+
+        function rejectRequest(index) {
+            const req = withdrawRequests[index];
+            if (!req || req.status !== 'pending') return;
+            req.status = 'rejected';
+            saveRequests();
+            renderIncomingRequests();
+            renderOutgoingHistory();
+            showToast(`❌ Запрос отклонён`);
+        }
+
+        // ===================== ИСТОРИЯ ИСХОДЯЩИХ ЗАПРОСОВ =====================
+        function renderOutgoingHistory() {
+            if (!currentUser) return;
+            const requests = withdrawRequests.filter(r => r.fromCode === currentUser.code);
+            withdrawHistory.innerHTML = '';
+            if (requests.length === 0) {
+                withdrawHistory.innerHTML = '<p style="color:rgba(255,255,255,0.3);font-size:13px;text-align:center;">Мои запросы</p>';
+                return;
+            }
+            requests.slice().reverse().forEach(req => {
+                const div = document.createElement('div');
+                div.style.cssText = 'padding:6px 10px;background:rgba(255,255,255,0.03);border-radius:6px;margin-bottom:4px;font-size:13px;display:flex;justify-content:space-between;align-items:center;color:rgba(255,255,255,0.7);';
+                const statusText = req.status === 'pending' ? '⏳ Ожидает' : req.status === 'approved' ? '✅ Одобрен' : '❌ Отклонён';
+                const statusColor = req.status === 'pending' ? '#f39c12' : req.status === 'approved' ? '#2ecc71' : '#ff6b6b';
+                div.innerHTML = `
+                    <span>$${req.amount.toFixed(2)} → ${req.toCode} <span style="color:${statusColor}">${statusText}</span></span>
+                `;
+                withdrawHistory.appendChild(div);
+            });
+        }
+
+        // ===================== ОТПРАВИТЬ ЗАПРОС =====================
+        withdrawBtn.addEventListener('click', function() {
+            const targetCode = withdrawTargetCode.value.trim();
+            const amount = parseFloat(withdrawAmount.value);
+
+            withdrawError.style.display = 'none';
+            withdrawSuccess.style.display = 'none';
+
+            if (!currentUser) {
+                withdrawError.textContent = '⚠️ Вы не авторизованы';
+                withdrawError.style.display = 'block';
+                return;
+            }
+            if (targetCode.length !== 3 || !/^\d{3}$/.test(targetCode)) {
+                withdrawError.textContent = '⚠️ Введите корректный 3-значный код владельца';
+                withdrawError.style.display = 'block';
+                return;
+            }
+            const targetUser = users.find(u => u.code === targetCode);
+            if (!targetUser) {
+                withdrawError.textContent = '⚠️ Пользователь с таким кодом не найден';
+                withdrawError.style.display = 'block';
+                return;
+            }
+            if (targetCode === currentUser.code) {
+                withdrawError.textContent = '⚠️ Нельзя запросить списание у самого себя';
+                withdrawError.style.display = 'block';
+                return;
+            }
+            if (isNaN(amount) || amount <= 0) {
+                withdrawError.textContent = '⚠️ Введите корректную сумму';
+                withdrawError.style.display = 'block';
+                return;
+            }
+            if (amount > (targetUser.money || 0) && !targetUser.isSuperAdmin) {
+                withdrawError.textContent = '⚠️ На счету владельца недостаточно средств';
+                withdrawError.style.display = 'block';
+                return;
+            }
+
+            const now = new Date();
+            const dateStr = now.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+            withdrawRequests.push({
+                fromCode: currentUser.code,
+                toCode: targetCode,
+                amount: amount,
+                status: 'pending',
+                date: dateStr
+            });
+            saveRequests();
+
+            withdrawSuccess.textContent = `✅ Запрос на списание $${amount.toFixed(2)} отправлен владельцу счёта ${targetCode}!`;
+            withdrawSuccess.style.display = 'block';
+            withdrawTargetCode.value = '';
+            withdrawAmount.value = '';
+
+            renderOutgoingHistory();
+
+            setTimeout(() => {
+                withdrawSuccess.style.display = 'none';
+            }, 3000);
+        });
+
+        // ===================== ПЕРЕВОД ПО КОДУ =====================
+        transferBtn.addEventListener('click', function() {
+            const code = transferCode.value.trim();
+            const amount = parseFloat(transferAmount.value);
+
+            transferError.style.display = 'none';
+            transferSuccess.style.display = 'none';
+
+            if (!currentUser) {
+                transferError.textContent = '⚠️ Вы не авторизованы';
+                transferError.style.display = 'block';
+                return;
+            }
+            if (code.length !== 3 || !/^\d{3}$/.test(code)) {
+                transferError.textContent = '⚠️ Введите корректный 3-значный код';
+                transferError.style.display = 'block';
+                return;
+            }
+            if (code === currentUser.code) {
+                transferError.textContent = '⚠️ Нельзя перевести самому себе';
+                transferError.style.display = 'block';
+                return;
+            }
+            const recipient = users.find(u => u.code === code);
+            if (!recipient) {
+                transferError.textContent = '⚠️ Пользователь с таким кодом не найден';
+                transferError.style.display = 'block';
+                return;
+            }
+            if (isNaN(amount) || amount <= 0) {
+                transferError.textContent = '⚠️ Введите корректную сумму';
+                transferError.style.display = 'block';
+                return;
+            }
+            if (amount > (currentUser.money || 0) && !currentUser.isSuperAdmin) {
+                transferError.textContent = '⚠️ Недостаточно средств';
+                transferError.style.display = 'block';
+                return;
+            }
+
+            const senderCode = currentUser.code;
+            const recipientCode = recipient.code;
+            const now = new Date();
+            const dateStr = now.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+            if (!currentUser.isSuperAdmin) {
+                currentUser.money = (currentUser.money || 0) - amount;
+            }
+            recipient.money = (recipient.money || 0) + amount;
+            saveUsers();
+
+            transferHistory.push({
+                from: senderCode,
+                to: recipientCode,
+                amount: amount,
+                date: dateStr
+            });
+            saveTransfers();
+
+            transferSuccess.textContent = `✅ Переведено $${amount.toFixed(2)} пользователю ${recipient.username} (код ${code})`;
+            transferSuccess.style.display = 'block';
+            transferCode.value = '';
+            transferAmount.value = '';
+
+            updateUserDashboard(currentUser);
+
+            setTimeout(() => {
+                transferSuccess.style.display = 'none';
+            }, 3000);
+        });
+
+        // ===================== ОЧИСТКА ИСТОРИИ =====================
+        document.getElementById('clearIncomingTransfersBtn').addEventListener('click', function() {
+            if (!currentUser) return;
+            const transfers = transferHistory.filter(t => t.to === currentUser.code);
+            if (transfers.length === 0) {
+                showToast('❌ Нет входящих переводов для очистки');
+                return;
+            }
+            showModal(
+                'Очистить всю историю входящих переводов?',
+                function() {
+                    transferHistory = transferHistory.filter(t => t.to !== currentUser.code);
+                    saveTransfers();
+                    renderIncomingTransfers();
+                    showToast('✅ История входящих переводов очищена');
+                },
+                function() {
+                    showToast('❌ Отменено');
+                }
+            );
+        });
+
+        document.getElementById('clearIncomingRequestsBtn').addEventListener('click', function() {
+            if (!currentUser) return;
+            const requests = withdrawRequests.filter(r => r.toCode === currentUser.code && r.status === 'pending');
+            if (requests.length === 0) {
+                showToast('❌ Нет входящих запросов для очистки');
+                return;
+            }
+            showModal(
+                'Очистить все входящие запросы на списание?',
+                function() {
+                    withdrawRequests = withdrawRequests.filter(r => r.toCode !== currentUser.code || r.status !== 'pending');
+                    saveRequests();
+                    renderIncomingRequests();
+                    showToast('✅ Входящие запросы очищены');
+                },
+                function() {
+                    showToast('❌ Отменено');
+                }
+            );
+        });
+
+        // ===================== ОБНОВЛЕНИЕ ДАШБОРДА =====================
+        function updateUserDashboard(user) {
+            if (user.isSuperAdmin) {
+                userBalance.textContent = '∞';
+                userBalance.className = 'balance-display infinity';
+            } else {
+                userBalance.textContent = `$${(user.money || 0).toFixed(2)}`;
+                userBalance.className = 'balance-display';
+            }
+            userCodeDisplay.textContent = user.code || '000';
+            renderUserTasks(user);
+            renderIncomingRequests();
+            renderOutgoingHistory();
+            renderIncomingTransfers();
+        }
+
+        // ===================== ЗАКРЫТЬ ДЕТАЛИ =====================
+        closeDetailsBtn.addEventListener('click', function() {
+            userDetails.classList.remove('active');
+            rechargeArea.classList.remove('active');
+            withdrawAdminArea.classList.remove('active');
+            taskArea.classList.remove('active');
+            rechargeError.style.display = 'none';
+            rechargeSuccess.style.display = 'none';
+            withdrawAdminError.style.display = 'none';
+            withdrawAdminSuccess.style.display = 'none';
+            taskError.style.display = 'none';
+            taskSuccess.style.display = 'none';
+        });
+
+        // ===================== ВХОД В АДМИНКУ =====================
+        adminLoginBtn.addEventListener('click', function() {
+            const login = adminLogin.value.trim();
+            const password = adminPassword.value.trim();
+
+            adminError.style.display = 'none';
+            adminSuccess.style.display = 'none';
+
+            const user = users.find(u =>
+                (u.username === login || u.email === login) &&
+                u.password === password
+            );
+
+            if (!user) {
+                adminError.textContent = '⚠️ Неверный логин или пароль';
+                adminError.style.display = 'block';
+                return;
+            }
+
+            if (!user.isAdmin && !user.isSuperAdmin) {
+                adminError.textContent = '⚠️ У вас нет прав администратора';
+                adminError.style.display = 'block';
+                return;
+            }
+
+            currentUser = user;
+
+            isAdminLoggedIn = true;
+            adminSuccess.textContent = `✅ Вход выполнен! (${user.isSuperAdmin ? 'Главный администратор' : 'Администратор'})`;
+            adminSuccess.style.display = 'block';
+            adminTools.style.display = 'block';
+            adminLogin.disabled = true;
+            adminPassword.disabled = true;
+            adminLoginBtn.disabled = true;
+            renderUserList();
+            showToast(`👑 Добро пожаловать, ${user.username}!`);
+        });
+
+        adminLogoutBtn.addEventListener('click', function() {
+            isAdminLoggedIn = false;
+            adminTools.style.display = 'none';
+            adminLogin.disabled = false;
+            adminPassword.disabled = false;
+            adminLoginBtn.disabled = false;
+            adminLogin.value = '';
+            adminPassword.value = '';
+            adminSuccess.style.display = 'none';
+            adminError.style.display = 'none';
+            adminPanel.style.display = 'none';
+            userDetails.classList.remove('active');
+            rechargeArea.classList.remove('active');
+            withdrawAdminArea.classList.remove('active');
+            taskArea.classList.remove('active');
+            rechargeError.style.display = 'none';
+            rechargeSuccess.style.display = 'none';
+            withdrawAdminError.style.display = 'none';
+            withdrawAdminSuccess.style.display = 'none';
+            taskError.style.display = 'none';
+            taskSuccess.style.display = 'none';
+            adminTaskAllError.style.display = 'none';
+            adminTaskAllSuccess.style.display = 'none';
+            businessError.style.display = 'none';
+            businessSuccess.style.display = 'none';
+        });
+
+        // ===================== РЕГИСТРАЦИЯ =====================
+        registerBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const username = regUsername.value.trim();
+            const email = regEmail.value.trim();
+            const password = regPassword.value.trim();
+            const confirm = regConfirm.value.trim();
+
+            regError.style.display = 'none';
+            regSuccess.style.display = 'none';
+
+            if (username.length < 3) {
+                regError.textContent = '⚠️ Логин должен быть минимум 3 символа';
+                regError.style.display = 'block';
+                return;
+            }
+            if (!email || !email.includes('@') || !email.includes('.')) {
+                regError.textContent = '⚠️ Введите корректный email';
+                regError.style.display = 'block';
+                return;
+            }
+            if (password.length < 6) {
+                regError.textContent = '⚠️ Пароль должен быть минимум 6 символов';
+                regError.style.display = 'block';
+                return;
+            }
+            if (password !== confirm) {
+                regError.textContent = '⚠️ Пароли не совпадают';
+                regError.style.display = 'block';
+                return;
+            }
+            if (users.some(u => u.username === username || u.email === email)) {
+                regError.textContent = '⚠️ Пользователь с таким логином или email уже существует';
+                regError.style.display = 'block';
+                return;
+            }
+
+            const code = generateCode();
+            users.push({
+                username: username,
+                email: email,
+                password: password,
+                money: 0,
+                tasks: [],
+                code: code,
+                isBusiness: false,
+                isAdmin: false,
+                isSuperAdmin: false
+            });
+            saveUsers();
+
+            regSuccess.textContent = `✅ Аккаунт "${username}" создан! Ваш код: ${code}`;
+            regSuccess.style.display = 'block';
+
+            regUsername.value = '';
+            regEmail.value = '';
+            regPassword.value = '';
+            regConfirm.value = '';
+
+            setTimeout(() => {
+                switchTab('login');
+                loginUsername.value = username;
+                regSuccess.style.display = 'none';
+            }, 1500);
+        });
+
+        // ===================== ВХОД ПОЛЬЗОВАТЕЛЯ =====================
+        loginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const login = loginUsername.value.trim();
+            const password = loginPassword.value.trim();
+
+            loginError.style.display = 'none';
+            loginSuccess.style.display = 'none';
+
+            if (!login || !password) {
+                loginError.textContent = '⚠️ Заполните все поля';
+                loginError.style.display = 'block';
+                return;
+            }
+
+            const user = users.find(u =>
+                (u.username === login || u.email === login) &&
+                u.password === password
+            );
+
+            if (!user) {
+                loginError.textContent = '⚠️ Неверный логин или пароль';
+                loginError.style.display = 'block';
+                return;
+            }
+
+            currentUser = user;
+            loginSuccess.textContent = `✅ Добро пожаловать, ${user.username}!`;
+            loginSuccess.style.display = 'block';
+
+            setTimeout(() => {
+                formsSection.style.display = 'none';
+                dashboard.style.display = 'block';
+                userNameDisplay.textContent = user.username;
+                updateUserDashboard(user);
+                loginSuccess.style.display = 'none';
+            }, 800);
+        });
+
+        // ===================== ВЫХОД =====================
+        logoutBtn.addEventListener('click', function() {
+            dashboard.style.display = 'none';
+            formsSection.style.display = 'block';
+            loginPassword.value = '';
+            loginUsername.value = '';
+            loginSuccess.style.display = 'none';
+            loginError.style.display = 'none';
+            currentUser = null;
+            switchTab('login');
+        });
+
+        // ===================== ENTER =====================
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                if (loginForm.classList.contains('active')) {
+                    loginBtn.click();
+                } else if (registerForm.classList.contains('active')) {
+                    registerBtn.click();
+                } else if (adminPanel.style.display === 'block' && !isAdminLoggedIn) {
+                    adminLoginBtn.click();
+                } else if (rechargeArea.classList.contains('active')) {
+                    confirmRechargeBtn.click();
+                } else if (withdrawAdminArea.classList.contains('active')) {
+                    confirmWithdrawAdminBtn.click();
+                }
+            }
+        });
+
+        // ===================== ЗАПУСК =====================
+        initApp();
+        if (currentUser) {
+            updateUserDashboard(currentUser);
+        }
+    </script>
+</body>
+</html>
